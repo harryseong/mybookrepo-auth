@@ -1,0 +1,36 @@
+## Server Config
+server.port=CHANGEME
+server.servlet.context-path=/mybookrepo
+server.servlet.session.timeout=240m
+debug=false
+spring.profiles.active=default
+
+## Logging
+# Level for loggers on classes inside the root package "com.harryseong" (and its sub-packages)
+# Available levels are: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+logging.level.com.harryseong=INFO
+logging.level.root=INFO
+
+## Azure MySQL Database
+spring.datasource.url=CHANGEME
+spring.datasource.username=CHANGEME
+spring.datasource.password=CHANGEME
+
+## Local MySQL Database
+#spring.datasource.url=CHANGEME
+#spring.datasource.username=CHANGEME
+#spring.datasource.password=CHANGEME
+
+## Spring Security
+spring.security.oauth2.resource.filter-order=3
+
+security.signing-key=CHANGEME
+security.encoding-strength=CHANGEME
+security.security-realm=CHANGEME
+
+security.jwt.client-id=CHANGEME
+security.jwt.client-secret=CHANGEME
+security.jwt.grant-type=password
+security.jwt.scope-read=read
+security.jwt.scope-write=write
+security.jwt.resource-ids=CHANGEME
