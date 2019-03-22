@@ -20,6 +20,9 @@ public class User {
     private String firstName;
     @NotBlank @NotNull
     private String lastName;
+    @NotBlank @NotNull
+    private String username;
+
     @NotBlank @NotNull @Email
     private String email;
 
@@ -59,6 +62,14 @@ public class User {
 
     public String getFullName() {
         return String.format("%s %s", firstName, lastName);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

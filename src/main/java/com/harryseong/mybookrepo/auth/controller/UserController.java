@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/account")
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthApplication.class);
 
@@ -34,14 +34,22 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * Method for checking if the proposed email username already exists in the db.
-     * @param email: Proposed username must be a unique email address not already in db.
-     * @return Boolean: Return true if the username already exist in the db.
+     * Method for checking if account email already exists in the db.
+     * @param email: Account email must be a unique email address not already in db.
+     * @return Boolean: Return true if email has not been used for another account.
      */
     @GetMapping("/email/{email}")
-    private Boolean doesUsernameExist(@PathVariable String email) {
-        return (userRepository.findByEmail(email)!=null);
+    private Boolean isEmailAvailable(@PathVariable String email) {
+        return (userRepository.findByEmail(email)==null);
     }
+
+    /**
+     * Method for checking if username is taken.
+     * @param username: Account username must be unique and not already in db.
+     * @return Boolean: Return true if username has not been used for another account.
+     */
+    @GetMapping("/username/{username}")
+    private Boolean isUsernameAvailable(@PathVariable String username) { return (userRepository.findByUsername(username)==null); }
 
     /**
      * Method for saving a new user.
@@ -50,16 +58,18 @@ public class UserController {
      */
     @PostMapping("")
     private ResponseEntity<String> registerNewUser(@RequestBody @Valid UserDTO userDTO) {
+        String username = userDTO.getUsername();
 
         // If user already exists,
-        if (userRepository.findByEmail(userDTO.getEmail()) != null) {
-            LOGGER.warn(String.format("User, %s, already exists in the system.", userDTO.getEmail()));
-            return new ResponseEntity<>(String.format("User, %s, already exists in the system.", userDTO.getEmail()), HttpStatus.CONFLICT);
+        if (userRepository.findByUsername(userDTO.getUsername()) != null) {
+            LOGGER.warn(String.format("User, %s, already exists in the system.", username));
+            return new ResponseEntity<>(String.format("User, %s, already exists in the system.", username), HttpStatus.CONFLICT);
         }
 
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
@@ -73,11 +83,11 @@ public class UserController {
 
         try {
             userRepository.save(user);
-            LOGGER.info(String.format("User, %s, has been registered.", user.getEmail()));
-            return new ResponseEntity<>(String.format("User, %s, has been registered.", user.getEmail()), HttpStatus.CREATED);
+            LOGGER.info(String.format("User, %s, has been registered.", username));
+            return new ResponseEntity<>(String.format("User, %s, has been registered.", username), HttpStatus.CREATED);
         } catch (Error e) {
-            LOGGER.error(String.format("User, %s, could not be registered due to a server error.", user.getEmail()));
-            return new ResponseEntity<>(String.format("User, %s, could not be registered due to a server error.", user.getEmail()), HttpStatus.INTERNAL_SERVER_ERROR);
+            LOGGER.error(String.format("User, %s, could not be registered due to a server error.", username));
+            return new ResponseEntity<>(String.format("User, %s, could not be registered due to a server error.", username), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
