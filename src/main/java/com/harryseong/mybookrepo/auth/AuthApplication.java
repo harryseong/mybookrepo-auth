@@ -35,8 +35,8 @@ public class AuthApplication {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("BookDB API")
-                .description("API for the Angular front end of the Harry Seong BookDB application.")
+                .title("MyBookRepo Auth API")
+                .description("Auth API for the Angular front end of the MyBookRepo application.")
                 .contact(new Contact("Harry Seong",
                         "https://www.harryseong.com/",
                         "harryseong@gmail.com"))
